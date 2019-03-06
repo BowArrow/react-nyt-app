@@ -8,6 +8,7 @@ const validateRegisterInput = require("../validation/register");
 const validateLoginInput = require("../validation/login");
 
 const User = require("../models/User");
+const Book = require('../models/Book');
 
 router.post('/register', function(req, res) {
     const { errors, isValid } = validateRegisterInput(req.body);
@@ -103,5 +104,20 @@ router.get('/me', passport.authenticate('jwt', { session: false }), (req, res) =
         email: req.user.email
     });
 });
+
+router.get('/books', (req, res) => {
+    Book.findAll({savedBy: req.user.id})
+        .then(books => {
+            return res.json(books);
+        })
+})
+
+router.post('/books', (req, res) => {
+    Book.create()
+})
+
+router.delete('/books/:id', (req, res) => {
+    
+})
 
 module.exports = router;
